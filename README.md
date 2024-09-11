@@ -1,2 +1,3 @@
-# kubernetes-workshop-omniopencon-2024
-kubernetes workshop
+# Kubernetes workshop OmniOpenCon 2024
+kubernetes workshop @ https://omniopencon.org
+
