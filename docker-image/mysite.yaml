@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: mysite
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mysite
+  namespace: mysite
+spec:
+  containers:
+  - name: mysite
+    image: mysite:v0.2
+
