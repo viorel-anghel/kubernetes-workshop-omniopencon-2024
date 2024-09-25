@@ -403,6 +403,16 @@ kubectl explain pod.spec.containers
 [...]
 ```
 
+## Exercitiu
+
+Modificati mysite astfel incat
+- in definitia deploymentului (`mysite-deploy.yaml`) sa se foloseasca o variabila de environment 
+numita MY_USERNAME si sa afiseze mesajul de hello urmat de valoarea variabilei 
+(de exemplu "Hello Viorel!")
+- hint1: trebuie modificata imaginea de container, sa foloseasca un mic shell script la ENTRYPOINT 
+care sa altereze fisierul `index.html` in functie de variabila de environment
+- hint2: daca variabila nu este definita, sa ramana mesajul "Hello World!"
+
 ## Cum functioneaza la noi in firma
 
 - avem programatori care lucreaza in echipe si in general o echipa se ocupa de un micro-serviciu
