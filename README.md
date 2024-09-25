@@ -20,5 +20,7 @@ Acesta este software free si open-source care permite sa rulati un Kubernetes lo
 
 ![rancher desktop preferences](rancher-desktop-pref1.png)
 
+## WHY?
+
 
 
