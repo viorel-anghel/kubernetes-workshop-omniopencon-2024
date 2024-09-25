@@ -80,16 +80,17 @@ kubectl run --image=nginx my-nginx
 ```
 
 De discutat:
-	- namespace default
-	- namespaced versus cluster-wide objects
-	- de unde se ia acea imagine `nginx`?
+
+- namespace default
+- namespaced versus cluster-wide objects
+- de unde se ia acea imagine `nginx`?
 
 ## Forma normala a comenzilor kubectl
 
-kubectl [-n namespace] VERB OBJECT_TYPE ONJECT_NAME [ -o wide ]
+`kubectl [-n namespace] VERB OBJECT_TYPE ONJECT_NAME [ -o wide ]`
 
-VERB: get describe delete create|run
-OBJECVT_TYPES (pana acum): node namespace pod
+- VERB: get describe delete create|run
+- OBJECVT_TYPES (pana acum): node namespace pod
 
 ## Imperative vs declarative
 
