@@ -1,5 +1,7 @@
 # Kubernetes workshop OmniOpenCon 2024
 
+# How to install stuff in Kubernetes
+
 kubernetes workshop @ https://omniopencon.org
 
 2024-09-25 Viorel Anghel
