@@ -351,6 +351,27 @@ curl -H 'Host: mysite.local' http://127.0.0.1/
 # 127.0.0.1 mysite.local
 ```
 
+## Cum sa confirmam ca raspund toate pod-urile
+
+Pentru ca podurile sunt identice, ele vor raspunde la fel din spatale loadbalancer-ului. 
+Pentru ca a vedea totusi ca nu raspunde unul singur dintre ele, putem sa na uitam la loguri.
+
+In mod normal am putea folosi comanda `kubectl logs nume_pod` pentru a vedea ce scrie un container
+la STDOUT/STDERR, la fel ca in Docker. Din pacate in imaginea noastra, `nginx` scrie logurile de access 
+intr-un fisier in `/var/log/nginx/access.log` asa ca va trebui sa inspectam via `kubectl exec`.
+
+```
+kubectl -n mysite get pods
+kubectl -n mysite exec -ti mysite-77c797fd6-5h86g -- bash
+	tail /var/log/nginx/access.log
+
+# in alt terminal
+[..]
+# in browser http://mysite.local/
+# si reload de cateva ori
+```
+
+
 ## An overview of what is missing
 
 Pentru ca timpul nu permite, nu am discutat despre multe pe care le aveam initial in plan. 
@@ -367,6 +388,20 @@ Asa ca iata cateva lucruri pe care le puteti studia in continuare:
 - firewalls in cluster cu NetworkPolicies
 
 Si calatoria abia incepe!
+
+Intr-un cluster normal/minimal de kubernetes exista aproximativ 60 de tipuri de obiecte. 
+Dar Kubernetes este extensibil, se pot defini tipuri de obiecte noi asa ca acest numar variaza. 
+O comanda utila in acest sens este `kubectl api-resources` 
+care listeaza, unul pe linie, tipurile de obiecte plus alte informatii utile pentru fiecare.
+
+Apoi, tot din linia de comanda, se poate folosi `kubectl explain` pentru a obtine informatii despre structura fisierelor YAML de definitie:
+
+```
+kubectl explain pod
+kubectl explain pod.spec
+kubectl explain pod.spec.containers
+[...]
+```
 
 ## Cum functioneaza la noi in firma
 
