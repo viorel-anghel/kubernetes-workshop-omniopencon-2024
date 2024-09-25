@@ -22,5 +22,97 @@ Acesta este software free si open-source care permite sa rulati un Kubernetes lo
 
 ## WHY?
 
+De ce este Kubernetes atat de popular in industrie? Cum s-a ajuns la el? La ce ajuta?
+
+- 2005-2011 Microservices - https://en.wikipedia.org/wiki/Microservices
+- 2013 Docker containers
+- 2014 Kubernetes - containers on multiple VMs
+
+## Containers versus VMs
+
+Pros and cons
+
+## Why Kubernetes and not...
+
+- Docker Swarm - too little, too late
+- 2014 - 2018 - other players
+- 2018 - all major cloud providers adopt Kubernetes
+
+## Avantajele comunitatii
+
+- free and open source
+- condus de o fundatie non-profit - Cloud Native Computing Foundation - 2015 - Kubernetes 1.0
+- probabil cel mai mare proiect open source dupa Linux Kernel
+- popularitate in crestere exponentiala
+
+## Avantaje tehnice
+
+- High Availability - la nivel de control-plane si la nivel de workers
+- Scalability - adding nodes to cluster
+	- Autoscaling - VPA, HPA, cluster auto-scaling
+- It works almost the same in cloud and on-premmise
+	- the great eqaulzer! cloud migrations made easy
+- Easy to run everywhere (like Docker!) - from laptop to 1 VM to 100 servers
+
+## Cum se acceseaza un cluster de Kubernetes
+- asa cum Docker are comanda de baza `docker`, Kubernetes are comanda `kubectl`
+- acesta este de fapt un simplu client care se conecteaza la Kubernetes api-server
+	- in consecinta au aparut sialte interfete (grafice sau text-mode sau chiar cod)
+- se bazeaza pe un fisier de configurare 
+	- default location `~/.kube/config`
+	- evironment variable KUBECONFIG=~/.kube/my-second-cluster
+	- in config sunt definite URL api-server si certificate SSL pentru autentificare/autorizare
+
+## Sa incercam primele comenzi kubectl
+
+```
+kubectl get nodes
+kubectl get nodes -o wide
+kubectl describe node XYX
+
+kubectl get namespaces
+
+kubectl get pods
+
+kubectl -n kube-system get pods
+
+kubectl run --image=nginx my-nginx
+```
+
+De discutat:
+	- namespace default
+	- namespaced versus cluster-wide objects
+	- de unde se ia acea imagine `nginx`?
+
+## Forma normala a comenzilor kubectl
+
+kubectl [-n namespace] VERB OBJECT_TYPE ONJECT_NAME [ -o wide ]
+
+VERB: get describe delete create|run
+OBJECVT_TYPES (pana acum): node namespace pod
+
+## Imperative vs declarative
+
+Pentru ca obiectele astea pot sa aibe tone de parametri, comenzile imperative de creare sunt rar folosite
+si este preferata forma declarativa, in care se scrie un fisier in format YAML care descrie obiectl de creat. de exemplu, urmatoarele variante creeaza de fapt acelasi obiect:
+
+```
+kubectl create namespace demo-ns
+
+kubectl apply -f demo-ns.yaml
+```
+
+Un exemplu de YAML *manifest* pentru crearea unui pod cu nginx dar in namespace-ul demo-ns: simple-pod.yaml 
+
+Structura din fisierul `simple-pod.yaml` este similara pentru toate obiectele din Kubernetes.
+Puteti inclusiv obtine respectivul yaml pentrun un obiect existent:
+```
+kubectl get pod nginx -o yaml
+```
+
+## Cum sa rulam codul nostru
+
+Va trebui sa ne intoarcem putin la Docker, mai exact la `docker build`. 
+Tot ce se ruleaza in Kubernetes este pe baza de containere sau mai exact pe imagini de container.
 
 
