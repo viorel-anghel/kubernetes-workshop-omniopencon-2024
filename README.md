@@ -351,5 +351,33 @@ curl -H 'Host: mysite.local' http://127.0.0.1/
 # 127.0.0.1 mysite.local
 ```
 
+## An overview of what is missing
+
+Pentru ca timpul nu permite, nu am discutat despre multe pe care le aveam initial in plan. 
+Asa ca iata cateva lucruri pe care le puteti studia in continuare:
+
+- pentru parametrizare, in pod/container definition se pot defini variabile de environment (asemanator cu `docker run -e ...`)
+- containerele pot avea resource limits si requests (CPU/RAM)
+- containerele pot avea health checks (liveness, readiness si startup probes)
+- un deployment foate scala automat orizontal, modificand automat `replicas` - HorizontalPodAutoscaler
+- configMap si Secrets - pentru parametri ce pot fi folositi
+- alte obiecte de tip workload: StatefulSet, DaemonSet, Job, CronJob
+- storage: volume emptydir, storageclass, PVC, PV
+- obiecte custom in cluster: CRDs
+- firewalls in cluster cu NetworkPolicies
+
+Si calatoria abia incepe!
+
+## Cum functioneaza la noi in firma
+
+- avem programatori care lucreaza in echipe si in general o echipa se ocupa de un micro-serviciu
+- avem o echipa de Devops Engineers care seteaza si administreaza clustere de Kubernetes si scriu aceste YAMl manifests
+- tot procesul este automatizat, de la 
+	- developer push code (and code review) 
+	- -> git repository (gitlab / github)
+	- -> automatic image build and test 
+	- -> image push to image repository 
+	- -> YAML manifests updated in git repo with the new version 
+	- -> ArgoCD deploy new manifests on change
 
  
