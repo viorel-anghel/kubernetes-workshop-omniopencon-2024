@@ -270,7 +270,86 @@ Check again: deployment, replicaset, pods.
 ## Time to discuss networking
 
 Avem un deployment cu 2 sau 3 pod-uri identice si gata sa primeasca request-uri http. Dar cum trimitem trafic catre ele?
-- fiecare pod are propriul IP
 - la restart/upgrade, numele si IPul pod-urilor se schimba
+- fiecare pod are propriul IP
+
+Prima problema se poate rezolva cu label-selector. Pentru a doua este nevoie de un nou tip de obiect in Kubernetes, numit `Service`. Acesta este si functioneaza exact ca un *loadbalancer*. 
+
+In general, un loadbalancer este un device (software sau hardware) care are un IP "extern", pe care primeste request-uri in retea (de obicei TCP) si le distribuie (round-rubin sau alt algoritm) la mai multe VM-uri care le proceseaza. A fost folosit dintotdeauna (adica din anii '90) de site-urile de mare trafic, pentru a distribui incarcarea si pentru a asigura HA transparent fata de user.
+
+In Kubernetes exista mai multe tipuri de Service, dintre care unul numit Loadbalancer. Foarte confusing, toate Services in Kubernetes sunt loadbalancere, cu diverse proprietati. 
+
+Cel mai simplu intre ele este numit cluster-IP service pentru ca o sa aiba o adresa de IP in reteaua interna clusterului, adica accesibil din alte workloads din interiorul clusterului. 
+
+Asa arata cel mai simplu posibil un obiect de tip service care trimite trafic catre pod-urile din deploymentul nostru: `less mysite-service.yaml`
+
+Observati:
+- obiect cu alt Kind
+- nu este specificat niicun nume de pod sau deployment sau IP
+- traficul este trimis catre toate pod-urile care respecta `selector`
+
+Sa vedem cum arata in actiune:
+
+```
+kubectl apply -f mysite-service.yaml 
+
+kubectl -n mysite get svc
+kubectl -n mysite describe svc
+```
+
+Intram din nou in pod-ul dummy si accesam serviciul:
+```
+	kubectl exec -ti dummy -- bash
+	curl 10.43.73.91
+	exit
+```
+
+Dar si mai elegant si stabil decat adresa de IP, serviciul are un nume fix in DNS. Poate fi accesat din acelasi namespace cu numele scurt al serviciului sau de oriunde din cluster cu `service_name.namespace`:
+Intram din nou in pod-ul dummy si accesam serviciul:
+```     
+        kubectl exec -ti dummy -- bash
+        curl mysite.mysite
+        exit
+```
+
+## Ok, cum accesam din exteriorul clusterului?
+
+Exista mai multe optiuni aici si o sa demonstrez doua dintre ele:
+
+### Port forwarding
+
+Daca avem acces cu kubectl al cluster, exista un mecanism de port forwarding:
+
+```
+# rulam comanda
+kubectl -n mysite port-forward svc/mysite 8888:80
+
+# accesam in browser http://localhost:8888/
+
+# oprim comanda cu CTRL+C
+```
+
+### Ingress
+
+Daca nu avem access cu kubectl, cazul normal al unui website expus catre public. Creeam un nou obiect de tip `Ingress`. SAcopul acestuia este de a permite accesarea mai multor website-uri DIFERITE, ruland in acelasi cluster, diferentiindu-le prin Name sau alte headere http. Asemanator cu Apache name based virtual hosting.
+
+```
+# less mysite-ingress.yaml
+
+kubectl apply -f mysite-ingress.yaml
+
+kubectl -n mysite get ingress
+
+kubectl -n mysite describe ingress
+
+# see also https://docs.rancherdesktop.io/how-to-guides/traefik-ingress-example/
+curl http://127.0.0.1/ 
+curl -H 'Host: mysite.local' http://127.0.0.1/ 
+
+# in browser
+# edit /etc/hosts
+# 127.0.0.1 mysite.local
+```
+
 
  
