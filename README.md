@@ -105,8 +105,13 @@ kubectl apply -f demo-ns.yaml
 
 Un exemplu de YAML *manifest* pentru crearea unui pod cu nginx dar in namespace-ul demo-ns: simple-pod.yaml 
 
-Structura din fisierul `simple-pod.yaml` este similara pentru toate obiectele din Kubernetes.
-Puteti inclusiv obtine respectivul yaml pentrun un obiect existent:
+Structura din fisierul `simple-pod.yaml` este similara pentru toate obiectele din Kubernetes: 
+- `apiVersion`, 
+- `kind` - tipul obiectului, 
+- `metadata` (cu `name` obligatoriu si frecvent `namespace`), 
+- `spec` cu specificatiile obiectului, aici formatul exact difera in functie de tipul obiectului
+
+Puteti inclusiv obtine respectivul yaml pentru un obiect existent:
 ```
 kubectl get pod nginx -o yaml
 ```
